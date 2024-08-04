@@ -20,7 +20,7 @@ export default function SignUp({
         <div className={`${className} inline`}>
             <Dialog>
                 <DialogTrigger asChild>
-                    <Button className={`${className} font-semibold text-slate-50`} variant="link">
+                    <Button className={`${className} font-semibold text-slate-500`} variant="link">
                         {label}
                     </Button>
                 </DialogTrigger>

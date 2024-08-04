@@ -71,3 +71,25 @@ export const registerSchema = z
         message: "Le mot de passe et la confimation ne sont pas identiques",
         path: ["confirmation"],
     });
+
+export const loginSchema = z.object({
+    username: z
+        .string()
+        .trim()
+        .min(2, {
+            message: "Le nom d'utilisateur doit contenir au moins 2 caractères",
+        })
+        .max(50, {
+            message:
+                "Le nom d'utilisateur doit contenir moins de 50 caractères",
+        }),
+    password: z
+        .string()
+        .trim()
+        .min(2, {
+            message: "Le mot de passe doit contenir au moins 2 caractères",
+        })
+        .max(50, {
+            message: "Le mot de passe doit contenir moins de 50 caractères",
+        }),
+});

@@ -3,5 +3,5 @@ export default function ContentSection({
 }: {
     children: React.ReactNode;
 }) {
-    return <section className="mt-5 w-full max-xl:px-10">{children}</section>;
+    return <section className="mt-5 w-full max-xl:px-10 mx-auto">{children}</section>;
 }

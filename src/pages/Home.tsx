@@ -22,10 +22,16 @@ export default function Home() {
                 </p>
                 <div className="my-10 w-full md:w-2/4 md:mx-auto">
                     <div className="grid grid-flow-col auto-cols-fr gap-4 ">
-                        <Button className="font-semibold bg-slate-50 text-slate-950 hover:bg-slate-300 hover:text-slate-900" asChild>
+                        <Button
+                            className="font-semibold bg-slate-50 text-slate-950 hover:bg-slate-300 hover:text-slate-900"
+                            asChild
+                        >
                             <Link to="/connexion">Se connecter</Link>
                         </Button>
-                        <Button className="font-semibold bg-slate-50 text-slate-950 hover:bg-slate-300 hover:text-slate-900" asChild>
+                        <Button
+                            className="font-semibold bg-slate-50 text-slate-950 hover:bg-slate-300 hover:text-slate-900"
+                            asChild
+                        >
                             <Link to="/jouer">Découvrir</Link>
                         </Button>
                     </div>
