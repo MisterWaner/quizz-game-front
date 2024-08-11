@@ -8,8 +8,10 @@ import {
 import Home from "@/pages/Home";
 import Game from "@/pages/Game";
 import Ranks from "@/pages/Ranks";
+import Quizz from "@/pages/Quizz";
 import Loggin from "@/pages/Loggin";
 import MainLayout from "@/layouts/MainLayout";
+import GameLayout from "@/layouts/GameLayout";
 
 function App() {
     const router = createBrowserRouter(
@@ -19,6 +21,9 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/connexion" element={<Loggin />} />
                     <Route path="/jouer" element={<Game />} />
+                    <Route path="/jouer/:type" element={<GameLayout />}>
+                        <Route index element={<Quizz />} />
+                    </Route>
                     <Route path="/classements" element={<Ranks />} />
                 </Route>
             </>
@@ -26,7 +31,7 @@ function App() {
     );
 
     return (
-        <div  className="bg-slate-950 text-slate-50 w-screen h-screen">
+        <div className="bg-slate-950 text-slate-50 w-screen h-screen">
             <RouterProvider router={router} />
         </div>
     );

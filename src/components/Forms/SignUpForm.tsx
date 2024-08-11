@@ -13,13 +13,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-    Select,
-    SelectItem,
-    SelectValue,
-    SelectTrigger,
-    SelectContent,
-} from "@/components/ui/select";
 
 export default function SignUpForm() {
     const form = useForm<z.infer<typeof registerSchema>>({
@@ -27,9 +20,7 @@ export default function SignUpForm() {
         defaultValues: {
             username: "",
             password: "",
-            confirmation: "",
-            age: 0,
-            level: "CP",
+            confirmation: ""
         },
     });
 
@@ -86,61 +77,6 @@ export default function SignUpForm() {
                         </FormItem>
                     )}
                 />
-                <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                        control={form.control}
-                        name="age"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Age</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="Saisis ton age"
-                                        {...field}
-                                        type="number"
-                                        min={0}
-                                        max={100}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="level"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Niveau</FormLabel>
-                                <Select
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                >
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Choisis ton niveau" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="CP">CP</SelectItem>
-                                        <SelectItem value="CE1">CE1</SelectItem>
-                                        <SelectItem value="CE2">CE2</SelectItem>
-                                        <SelectItem value="CM1">CM1</SelectItem>
-                                        <SelectItem value="CM2">CM2</SelectItem>
-                                        <SelectItem value="6e">6e</SelectItem>
-                                        <SelectItem value="5e">5e</SelectItem>
-                                        <SelectItem value="4e">4e</SelectItem>
-                                        <SelectItem value="3e">3e</SelectItem>
-                                        <SelectItem value="Lycée">
-                                            Lycée
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
                 <div className="grid grid-cols-2 gap-4">
                     <Button type="submit" className="col-start-2">S&apos;enregistrer</Button>
                 </div>
