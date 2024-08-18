@@ -4,7 +4,7 @@ import DailyRankingTable from "@/components/RankingTable/DailyRankingTable";
 
 export default function RankingTable() {
     return (
-        <Tabs defaultValue="global-ranking" className="mt-10 md:w-1/2 mx-auto flex flex-col gap-4">
+        <Tabs defaultValue="global-ranking" className="md:w-1/2 mx-auto flex flex-col gap-4">
             <TabsList className="flex flex-row ">
                 <TabsTrigger value="global-ranking">Classement Général</TabsTrigger>
                 <TabsTrigger value="daily-ranking">Classement Journalier</TabsTrigger>

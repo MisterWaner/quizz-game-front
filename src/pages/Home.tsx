@@ -57,9 +57,7 @@ export default function Home() {
                 </div>
             </ContentSection>
             <ContentSection>
-                <div className="mt-10">
-                    <RankingTable />
-                </div>
+                <RankingTable />
             </ContentSection>
         </>
     );
