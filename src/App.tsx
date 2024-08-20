@@ -31,7 +31,7 @@ function App() {
     );
 
     return (
-        <div className="bg-slate-950 text-slate-50 w-screen h-screen">
+        <div>
             <RouterProvider router={router} />
         </div>
     );

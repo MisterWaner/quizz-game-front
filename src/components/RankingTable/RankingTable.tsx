@@ -1,6 +1,6 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import GlobalRankingTable from "@/components/RankingTable/GlobalRankingTable";
-import DailyRankingTable from "@/components/RankingTable/DailyRankingTable";
+import {GlobalTop5RankingTable} from "@/components/RankingTable/GlobalRankingTable";
+import {DailyTop5RankingTable} from "@/components/RankingTable/DailyRankingTable";
 
 export default function RankingTable() {
     return (
@@ -10,10 +10,10 @@ export default function RankingTable() {
                 <TabsTrigger value="daily-ranking">Classement Journalier</TabsTrigger>
             </TabsList>
             <TabsContent value="global-ranking">
-                <GlobalRankingTable />
+                <GlobalTop5RankingTable />
             </TabsContent>
             <TabsContent value="daily-ranking">
-                <DailyRankingTable />
+                <DailyTop5RankingTable />
             </TabsContent>
         </Tabs>
     )

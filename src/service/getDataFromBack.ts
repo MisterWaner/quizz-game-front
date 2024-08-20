@@ -68,3 +68,49 @@ export async function getGlobalScores(): Promise<User[]> {
         throw error;
     }
 }
+
+export async function getTop5DailyScores(): Promise<User[]> {
+    try {
+        const response = await fetch(`${BASE_URL}/scores/daily-five`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        console.log(response);
+
+        if (response.ok) {
+            const responseData = await response.json();
+            return responseData;
+        } else {
+            throw new Error(
+                "Une erreur est survenue lors de la récupération des scores"
+            );
+        }
+    } catch (error) {
+        console.error("Une erreur est survenue", error);
+        throw error;
+    }
+}
+
+export async function getTop5GlobalScores(): Promise<User[]> {
+    try {
+        const response = await fetch(`${BASE_URL}/scores/global-five`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        console.log(response);
+
+        if (response.ok) {
+            const responseData = await response.json();
+            return responseData;
+        } else {
+            throw new Error(
+                "Une erreur est survenue lors de la récupération des scores"
+            );
+        }
+    } catch (error) {
+        console.error("Une erreur est survenue", error);
+        throw error;
+    }
+}
