@@ -10,8 +10,10 @@ import Game from "@/pages/Game";
 import Ranks from "@/pages/Ranks";
 import Quizz from "@/pages/Quizz";
 import Loggin from "@/pages/Loggin";
+import Register from "@/pages/Register";
 import MainLayout from "@/layouts/MainLayout";
 import GameLayout from "@/layouts/GameLayout";
+import RegisterDialog from "./components/AlertDialog/RegisterDialog";
 
 function App() {
     const router = createBrowserRouter(
@@ -20,6 +22,7 @@ function App() {
                 <Route path="/" element={<MainLayout />}>
                     <Route path="/" element={<Home />} />
                     <Route path="/connexion" element={<Loggin />} />
+                    <Route path="/inscription" element={<Register />} errorElement={<RegisterDialog />} />
                     <Route path="/jouer" element={<Game />} />
                     <Route path="/jouer/:type" element={<GameLayout />}>
                         <Route index element={<Quizz />} />

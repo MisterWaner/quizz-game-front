@@ -2,6 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useState } from "react";
+
 import { registerSchema } from "@/lib/zod-schemas";
 import {
     Form,
@@ -13,8 +15,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { regiserUser } from "@/service/authToBack";
+import RegisterDialog from "../AlertDialog/RegisterDialog";
+
 
 export default function SignUpForm() {
+
+    const [error, setError] = useState<string>("");
+
     const form = useForm<z.infer<typeof registerSchema>>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
@@ -25,7 +33,22 @@ export default function SignUpForm() {
     });
 
     function onSubmit(values: z.infer<typeof registerSchema>) {
-        console.log(values);
+        try {
+            regiserUser(values);
+            return (
+                <RegisterDialog error={error} />
+            )
+        } catch (error) {
+            console.error(error, "Erreur d'envoie des données au back");
+            if (error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("Une erreur est survenue lors de l'enregistrement");
+            }
+            return (
+                <RegisterDialog error={error instanceof Error ? error.message : "Une erreur est survenue lors de l'enregistrement"} />
+            )
+        }
     }
     return (
         <Form {...form}>

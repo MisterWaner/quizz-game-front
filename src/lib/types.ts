@@ -12,10 +12,10 @@ export type Question = {
 };
 
 export type User = {
-    id: number;
+    id?: number;
     username: string;
     password: string;
-    isRegistered: boolean;
-    score: number;
-    global_score: number;
+    isRegistered?: boolean;
+    score?: number;
+    global_score?: number;
 };
