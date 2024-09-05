@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     Card,
@@ -55,9 +55,7 @@ export default function QuestionCard({ type }: { type: string }) {
         } else {
             setDialogTitle("Le quizz est terminé !");
             setDialogTitleColor("text-black");
-            setDialogActionColor(
-                "bg-black text-slate-50 hover:bg-black/90"
-            );
+            setDialogActionColor("bg-black text-slate-50 hover:bg-black/90");
         }
     };
 
@@ -77,7 +75,9 @@ export default function QuestionCard({ type }: { type: string }) {
                     "bg-green-500 text-slate-50 hover:bg-green-500/90"
                 );
                 incrementScore();
-            } else if (Number(playerAnswer) !== Number(currentQuestion.answer)) {
+            } else if (
+                Number(playerAnswer) !== Number(currentQuestion.answer)
+            ) {
                 setDialogTitle(
                     `Dommage ! Mauvaise réponse! La bonne réponse est ${currentQuestion.answer}`
                 );
@@ -155,8 +155,10 @@ export default function QuestionCard({ type }: { type: string }) {
                         <CardTitle>Question</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-sm italic">{currentQuestion?.question}</p>
-                        <div className="grid grid-cols-3 items-center gap-4 mt-4">
+                        <p className="text-sm italic">
+                            {currentQuestion?.question}
+                        </p>
+                        <div className="grid grid-cols-3 items-center gap-4 mt-4" tabIndex={0}>
                             <Label>Ta réponse :</Label>
                             <Input
                                 className="col-span-2"

@@ -1,3 +1,5 @@
+import { useState, useEffect, useCallback } from "react";
+
 import {
     AlertDialog,
     AlertDialogTrigger,
@@ -33,15 +35,34 @@ export default function ResultModal({
         (state) => state.incrementProgress
     );
 
-    const handleNextQuestion: () => void = () => {
+    const handleNextQuestion = () => {
         generateQuestion(type);
         incrementQuestionCounter();
         incrementProgress();
         console.log({ progress, totalProgress, questionCounter });
     };
+
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleKeyDown = useCallback(
+        (event: KeyboardEvent) => {
+            if (event.key === "Enter") {
+                setIsOpen(true);
+                handleSubmit();
+            }
+        },
+        [handleSubmit]
+    );
+    useEffect(() => {
+        window.addEventListener("keydown", handleKeyDown);
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [handleKeyDown]);
+
     return (
-        <AlertDialog>
-            <AlertDialogTrigger asChild>
+        <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+            <AlertDialogTrigger asChild aria-pressed="true">
                 <Button className="font-semibold w-2/6" onClick={handleSubmit}>
                     Valider
                 </Button>
@@ -55,7 +76,9 @@ export default function ResultModal({
                 <AlertDialogFooter>
                     <AlertDialogAction
                         className={`${dialogActionColor} font-semibold`}
-                        onClick={handleNextQuestion}
+                        onClick={() => {
+                            handleNextQuestion();
+                        }}
                     >
                         Suivant
                     </AlertDialogAction>
