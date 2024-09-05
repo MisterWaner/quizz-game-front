@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import ResultModal from "@/components/Modals/ResultModal";
 import SaveScoreModal from "@/components/Modals/SaveScoreModal";
+import Timer from "@/components/Timer";
 
 import { useCourseStore } from "@/store/CoursesStore";
 import { getQuestions } from "@/service/getDataFromBack";
@@ -22,6 +23,7 @@ export default function QuestionCard({ type }: { type: string }) {
     const [dialogActionColor, setDialogActionColor] = useState<string>("");
     const [questions, setQuestions] = useState<Question[]>([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
+    const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const playerAnswer = useCourseStore((state) => state.playerAnswer);
@@ -36,22 +38,33 @@ export default function QuestionCard({ type }: { type: string }) {
     const incrementDailyScore = useCourseStore(
         (state) => state.incrementDailyScore
     );
+    const resetTimer = useCourseStore((state) => state.resetTimer);
 
     useEffect(() => {
         const loadQuestions = async () => {
             const questions = await getQuestions(type);
             setQuestions(questions);
             setCurrentQuestionIndex(0);
+
+            setTimeout(() => {
+                resetTimer(15);
+                setIsTimerRunning(true);
+            }, 1000);
         };
 
         loadQuestions();
-    }, [type]);
+    }, [resetTimer, type]);
 
     const currentQuestion = questions[currentQuestionIndex];
 
     const handleNextQuestion = () => {
+        setIsTimerRunning(false);
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
+            setTimeout(() => {
+                
+                setIsTimerRunning(true);
+            }, 2000);
         } else {
             setDialogTitle("Le quizz est terminé !");
             setDialogTitleColor("text-black");
@@ -90,6 +103,7 @@ export default function QuestionCard({ type }: { type: string }) {
                 setDialogTitleColor("");
                 setDialogActionColor("");
             }
+            setIsTimerRunning(false);
         }
 
         if (progress === totalProgress) {
@@ -106,7 +120,13 @@ export default function QuestionCard({ type }: { type: string }) {
         useCourseStore.setState({
             playerAnswer: "",
         });
+        setIsTimerRunning(false);
         handleNextQuestion();
+    };
+
+    const handleTimeOut = () => {
+        handleSubmit();
+        setIsTimerRunning(false);
     };
 
     const data = useCourseStore((state) => ({
@@ -158,7 +178,10 @@ export default function QuestionCard({ type }: { type: string }) {
                         <p className="text-sm italic">
                             {currentQuestion?.question}
                         </p>
-                        <div className="grid grid-cols-3 items-center gap-4 mt-4" tabIndex={0}>
+                        <div
+                            className="grid grid-cols-3 items-center gap-4 mt-4"
+                            tabIndex={0}
+                        >
                             <Label>Ta réponse :</Label>
                             <Input
                                 className="col-span-2"
@@ -167,6 +190,7 @@ export default function QuestionCard({ type }: { type: string }) {
                                 value={playerAnswer}
                             />
                         </div>
+                        {isTimerRunning && <Timer onTimeOut={handleTimeOut} />}
                     </CardContent>
                     <CardFooter className="justify-end">
                         <ResultModal

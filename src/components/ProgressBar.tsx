@@ -8,7 +8,7 @@ export default function ProgressBar() {
         return (
             <Progress
                 value={progress}
-                className="md:w-1/2 mx-auto mt-24"
+                className="md:w-1/2 mx-auto mt-10"
                 indicatorColor="bg-red-500"
             />
         );

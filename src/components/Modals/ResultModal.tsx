@@ -8,6 +8,7 @@ import {
     AlertDialogTitle,
     AlertDialogFooter,
     AlertDialogAction,
+    AlertDialogDescription
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { useCourseStore } from "@/store/CoursesStore";
@@ -34,6 +35,7 @@ export default function ResultModal({
     const incrementProgress = useCourseStore(
         (state) => state.incrementProgress
     );
+    const resetTimer = useCourseStore((state) => state.resetTimer);
 
     const handleNextQuestion = () => {
         generateQuestion(type);
@@ -62,12 +64,15 @@ export default function ResultModal({
 
     return (
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-            <AlertDialogTrigger asChild aria-pressed="true">
+            <AlertDialogTrigger asChild>
                 <Button className="font-semibold w-2/6" onClick={handleSubmit}>
                     Valider
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
+                <AlertDialogDescription style={{visibility: "hidden"}}>
+                    Fenêtre de confirmation
+                </AlertDialogDescription>
                 <AlertDialogHeader>
                     <AlertDialogTitle className={`${dialogTitleColor}`}>
                         {dialogTitle}
@@ -78,6 +83,7 @@ export default function ResultModal({
                         className={`${dialogActionColor} font-semibold`}
                         onClick={() => {
                             handleNextQuestion();
+                            resetTimer(15);
                         }}
                     >
                         Suivant

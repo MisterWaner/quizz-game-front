@@ -27,25 +27,31 @@ export const courseSelectorData: CourseSeclectorData[] = [
                 path: "multiplication",
                 type: "multiplication",
             },
+            {
+                id: 4,
+                title: "Quizz aléatoire",
+                path: "random",
+                type: "random",
+            }
         ],
     },
     {
         label: "Géometrie",
         courses: [
             {
-                id: 4,
+                id: 5,
                 title: "Cercle",
                 path: "cercle",
                 type: "cercle",
             },
             {
-                id: 5,
+                id: 6,
                 title: "Cylindre",
                 path: "cylindre",
                 type: "cylindre",
             },
             {
-                id: 6,
+                id: 7,
                 title: "Sphere",
                 path: "sphere",
                 type: "sphere",
