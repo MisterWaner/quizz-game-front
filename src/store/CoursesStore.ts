@@ -15,7 +15,6 @@ type CourseState = {
     progress: number;
     totalProgress: number;
     globalTotalQuestions: number;
-    timer: number;
 };
 
 type Action = {
@@ -32,9 +31,6 @@ type Action = {
     setGlobalTotalQuestions: () => void;
     incrementProgress: () => void;
     resetProgress: () => void;
-    setTimer: (timer: number) => void;
-    decrementTimer: () => void;
-    resetTimer: (timer: number) => void;
 };
 
 export const useCourseStore = create<CourseState & Action>()((set, get) => ({
@@ -43,7 +39,6 @@ export const useCourseStore = create<CourseState & Action>()((set, get) => ({
     isSelected: false,
     question: null,
     score: 0,
-    timer: 15,
     dailyScore: 0,
     weeklyScore: 0,
     monthlyScore: 0,
@@ -91,19 +86,6 @@ export const useCourseStore = create<CourseState & Action>()((set, get) => ({
     setGlobalTotalQuestions: () => {
         const { globalTotalQuestions } = get();
         set({ globalTotalQuestions: globalTotalQuestions + 1 });
-    },
-    // Timer
-    setTimer(time) {
-        set({ timer: time });
-    },
-    decrementTimer: () => {
-        const { timer } = get();
-        if (timer > 0) {
-            set({ timer: timer - 1 });
-        }
-    },
-    resetTimer: (time) => {
-        set({ timer: time });
     },
     generateQuestion: (type) => {
         let question;

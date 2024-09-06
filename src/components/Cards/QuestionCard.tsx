@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import ResultModal from "@/components/Modals/ResultModal";
 import SaveScoreModal from "@/components/Modals/SaveScoreModal";
-import Timer from "@/components/Timer";
 
 import { useCourseStore } from "@/store/CoursesStore";
 import { getQuestions } from "@/service/getDataFromBack";
@@ -24,12 +23,14 @@ export default function QuestionCard({ type }: { type: string }) {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
     const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
+    const [timer, setTimer] = useState<number>(15);
     const navigate = useNavigate();
 
     const playerAnswer = useCourseStore((state) => state.playerAnswer);
     const progress = useCourseStore((state) => state.progress);
     const totalProgress = useCourseStore((state) => state.totalProgress);
     const incrementScore = useCourseStore((state) => state.incrementScore);
+    const incrementProgress = useCourseStore((state) => state.incrementProgress);
     const resetProgress = useCourseStore((state) => state.resetProgress);
     const resetScore = useCourseStore((state) => state.resetScore);
     const resetQuestionCounter = useCourseStore(
@@ -38,48 +39,48 @@ export default function QuestionCard({ type }: { type: string }) {
     const incrementDailyScore = useCourseStore(
         (state) => state.incrementDailyScore
     );
-    const resetTimer = useCourseStore((state) => state.resetTimer);
 
     useEffect(() => {
         const loadQuestions = async () => {
             const questions = await getQuestions(type);
             setQuestions(questions);
             setCurrentQuestionIndex(0);
-
-            setTimeout(() => {
-                resetTimer(15);
-                setIsTimerRunning(true);
-            }, 1000);
         };
 
         loadQuestions();
-    }, [resetTimer, type]);
+    }, [type]);
+
+    useEffect(() => {
+        if (isTimerRunning && timer > 0) {
+            const intervalId = setInterval(() => {
+                setTimer((prevTimer) => prevTimer - 1);
+            }, 1000);
+
+            return () => clearInterval(intervalId);
+        }
+    }, [isTimerRunning, timer]);
 
     const currentQuestion = questions[currentQuestionIndex];
 
-    const handleNextQuestion = () => {
-        setIsTimerRunning(false);
+    function handleNextQuestion() {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
-            setTimeout(() => {
-                
-                setIsTimerRunning(true);
-            }, 2000);
+            incrementProgress();
         } else {
             setDialogTitle("Le quizz est terminé !");
             setDialogTitleColor("text-black");
             setDialogActionColor("bg-black text-slate-50 hover:bg-black/90");
         }
-    };
+    }
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
         const value = event.target.value;
         useCourseStore.setState({
             playerAnswer: value,
         });
-    };
+    }
 
-    const checkPlayerAnswer = (playerAnswer: string | number) => {
+    function checkPlayerAnswer(playerAnswer: string | number) {
         if (currentQuestion) {
             if (Number(playerAnswer) === Number(currentQuestion.answer)) {
                 setDialogTitle("Bravo ! Bonne réponse !");
@@ -113,21 +114,28 @@ export default function QuestionCard({ type }: { type: string }) {
                 "bg-green-500 text-slate-50 hover:bg-green-500/90"
             );
         }
-    };
+    }
 
-    const handleSubmit = () => {
+    function handleSubmit() {
         checkPlayerAnswer(playerAnswer);
         useCourseStore.setState({
             playerAnswer: "",
         });
         setIsTimerRunning(false);
-        handleNextQuestion();
-    };
+    }
 
-    const handleTimeOut = () => {
+    function handleTimeOut() {
         handleSubmit();
         setIsTimerRunning(false);
-    };
+    }
+
+    if (isTimerRunning && timer === 0) {
+        handleTimeOut();
+    }
+
+    function resetTimer() {
+        setTimer(15);
+    }
 
     const data = useCourseStore((state) => ({
         score: state.score,
@@ -170,7 +178,10 @@ export default function QuestionCard({ type }: { type: string }) {
                     </CardFooter>
                 </Card>
             ) : (
-                <Card className="md:w-1/2 mx-auto mt-24">
+                <Card
+                    className="md:w-1/2 mx-auto mt-24"
+                    onMouseEnter={() => setIsTimerRunning(true)}
+                >
                     <CardHeader>
                         <CardTitle>Question</CardTitle>
                     </CardHeader>
@@ -188,9 +199,26 @@ export default function QuestionCard({ type }: { type: string }) {
                                 type="text"
                                 onChange={handleInputChange}
                                 value={playerAnswer}
+                                disabled={timer === 0}
                             />
                         </div>
-                        {isTimerRunning && <Timer onTimeOut={handleTimeOut} />}
+                        {isTimerRunning && timer > 10 ? (
+                            <div className="font-bold text-7xl flex w-full justify-center mt-4 text-green-500">
+                                {timer}
+                            </div>
+                        ) : isTimerRunning && timer > 5 && timer <= 10 ? (
+                            <div className="font-bold text-7xl flex w-full justify-center mt-4 text-orange-500">
+                                {timer}
+                            </div>
+                        ) : isTimerRunning && timer > 0 && timer <= 5 ? (
+                            <div className="font-bold text-7xl flex w-full justify-center mt-4 text-red-500  animate-ping">
+                                {timer}
+                            </div>
+                        ) : (
+                            <div className="font-bold text-7xl flex w-full justify-center mt-4 text-slate-500">
+                                {timer}
+                            </div>
+                        )}
                     </CardContent>
                     <CardFooter className="justify-end">
                         <ResultModal
@@ -198,6 +226,8 @@ export default function QuestionCard({ type }: { type: string }) {
                             dialogTitleColor={dialogTitleColor}
                             dialogActionColor={dialogActionColor}
                             handleSubmit={handleSubmit}
+                            resetTimer={resetTimer}
+                            handleNextQuestion={handleNextQuestion}
                         />
                     </CardFooter>
                 </Card>

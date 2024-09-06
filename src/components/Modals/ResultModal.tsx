@@ -11,38 +11,22 @@ import {
     AlertDialogDescription
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useCourseStore } from "@/store/CoursesStore";
 
 export default function ResultModal({
     dialogTitle,
     dialogTitleColor,
     dialogActionColor,
     handleSubmit,
+    resetTimer,
+    handleNextQuestion
 }: {
     dialogTitle: string;
     dialogTitleColor: string;
     dialogActionColor: string;
     handleSubmit: () => void;
+    resetTimer: () => void;
+    handleNextQuestion: () => void;
 }) {
-    const type = useCourseStore((state) => state.type);
-    const generateQuestion = useCourseStore((state) => state.generateQuestion);
-    const questionCounter = useCourseStore((state) => state.questionCounter);
-    const incrementQuestionCounter = useCourseStore(
-        (state) => state.incrementQuestionCounter
-    );
-    const progress = useCourseStore((state) => state.progress);
-    const totalProgress = useCourseStore((state) => state.totalProgress);
-    const incrementProgress = useCourseStore(
-        (state) => state.incrementProgress
-    );
-    const resetTimer = useCourseStore((state) => state.resetTimer);
-
-    const handleNextQuestion = () => {
-        generateQuestion(type);
-        incrementQuestionCounter();
-        incrementProgress();
-        console.log({ progress, totalProgress, questionCounter });
-    };
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -55,6 +39,9 @@ export default function ResultModal({
         },
         [handleSubmit]
     );
+
+    
+
     useEffect(() => {
         window.addEventListener("keydown", handleKeyDown);
         return () => {
@@ -83,7 +70,7 @@ export default function ResultModal({
                         className={`${dialogActionColor} font-semibold`}
                         onClick={() => {
                             handleNextQuestion();
-                            resetTimer(15);
+                            resetTimer();
                         }}
                     >
                         Suivant
