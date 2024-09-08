@@ -19,32 +19,25 @@ import {
     SuccessLoginDialog,
     ErrorLoginDialog,
 } from "../AlertDialog/LoginDialog";
-import { loginUser } from "@/service/authToBack";
+import { useAuthStore } from "@/store/AuthStore";
 
 export default function LoginForm() {
     const form = useForm<z.infer<typeof loginSchema>>({
         resolver: zodResolver(loginSchema),
     });
 
-    const [error, setError] = useState<string>("");
+    const { login, error } = useAuthStore();
     const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
     const [showSuccessDialog, setShowSuccessDialog] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
     const handleLogin = async(data: z.infer<typeof loginSchema>) => {
-        try {
-            await loginUser(data);
-            console.log(data);
-            setError("");
+        await login(data);
+
+        if (!error) {
             setShowSuccessDialog(true);
-        } catch (error) {
-            console.error(error, "Erreur d'envoie des données au back");
-            if (error instanceof Error) {
-                setError(error.message);
-            } else {
-                setError("Une erreur est survenue lors de la connexion");
-            }
+        } else {
             setShowErrorDialog(true);
         }
     };
@@ -55,7 +48,7 @@ export default function LoginForm() {
 
     const handleCloseSuccessDialog = () => {
         setShowSuccessDialog(false);
-        navigate("/");
+        navigate("/compte");
     };
 
     return (

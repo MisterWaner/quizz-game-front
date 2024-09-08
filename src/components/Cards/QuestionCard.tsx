@@ -30,7 +30,9 @@ export default function QuestionCard({ type }: { type: string }) {
     const progress = useCourseStore((state) => state.progress);
     const totalProgress = useCourseStore((state) => state.totalProgress);
     const incrementScore = useCourseStore((state) => state.incrementScore);
-    const incrementProgress = useCourseStore((state) => state.incrementProgress);
+    const incrementProgress = useCourseStore(
+        (state) => state.incrementProgress
+    );
     const resetProgress = useCourseStore((state) => state.resetProgress);
     const resetScore = useCourseStore((state) => state.resetScore);
     const resetQuestionCounter = useCourseStore(
@@ -99,10 +101,16 @@ export default function QuestionCard({ type }: { type: string }) {
                 setDialogActionColor(
                     "bg-red-500 text-slate-50 hover:bg-red-500/90"
                 );
+            } else if ((!Number(playerAnswer)) && (timer === 0)) {
+                setDialogTitle(`Dommage ! le temps est écoulé ! La bonne réponse est ${currentQuestion.answer}`);
+                setDialogTitleColor("text-red-500");
+                setDialogActionColor(
+                    "bg-red-500 text-slate-50 hover:bg-red-500/90"
+                );
             } else {
-                setDialogTitle("");
-                setDialogTitleColor("");
-                setDialogActionColor("");
+                setDialogTitle("")
+                setDialogTitleColor("")
+                setDialogActionColor("")
             }
             setIsTimerRunning(false);
         }
@@ -203,19 +211,19 @@ export default function QuestionCard({ type }: { type: string }) {
                             />
                         </div>
                         {isTimerRunning && timer > 10 ? (
-                            <div className="font-bold text-7xl flex w-full justify-center mt-4 text-green-500">
+                            <div className="font-bold text-3xl flex w-full justify-center mt-4 text-green-500">
                                 {timer}
                             </div>
                         ) : isTimerRunning && timer > 5 && timer <= 10 ? (
-                            <div className="font-bold text-7xl flex w-full justify-center mt-4 text-orange-500">
+                            <div className="font-bold text-3xl flex w-full justify-center mt-4 text-orange-500">
                                 {timer}
                             </div>
                         ) : isTimerRunning && timer > 0 && timer <= 5 ? (
-                            <div className="font-bold text-7xl flex w-full justify-center mt-4 text-red-500  animate-ping">
+                            <div className="font-bold text-3xl flex w-full justify-center mt-4 text-red-500  animate-ping">
                                 {timer}
                             </div>
                         ) : (
-                            <div className="font-bold text-7xl flex w-full justify-center mt-4 text-slate-500">
+                            <div className="font-bold text-3xl flex w-full justify-center mt-4 text-slate-500">
                                 {timer}
                             </div>
                         )}
