@@ -1,9 +1,7 @@
-import { useAuthStore } from "@/store/AuthStore";
-import { User } from "@/lib/types";
+import useCookie from "@/hooks/useCookie";
 
 export default function Account() {
-    const user = useAuthStore((state) => state.user);
-    const { username, score, global_score } = user as User;
+    const { username, score, global_score } = useCookie();
     return (
         <div>
             <h1>Mon compte</h1>

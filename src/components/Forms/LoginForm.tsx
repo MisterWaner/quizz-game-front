@@ -19,26 +19,28 @@ import {
     SuccessLoginDialog,
     ErrorLoginDialog,
 } from "../AlertDialog/LoginDialog";
-import { useAuthStore } from "@/store/AuthStore";
+import { loginUser } from "@/service/authToBack";
 
 export default function LoginForm() {
     const form = useForm<z.infer<typeof loginSchema>>({
         resolver: zodResolver(loginSchema),
     });
 
-    const { login, error } = useAuthStore();
     const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
     const [showSuccessDialog, setShowSuccessDialog] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
 
     const navigate = useNavigate();
 
     const handleLogin = async(data: z.infer<typeof loginSchema>) => {
-        await login(data);
+        await loginUser(data);
 
         if (!error) {
             setShowSuccessDialog(true);
+            setError("");
         } else {
             setShowErrorDialog(true);
+            setError(error);
         }
     };
 

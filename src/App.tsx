@@ -4,8 +4,6 @@ import {
     createRoutesFromElements,
     Route,
 } from "react-router-dom";
-import { useEffect } from "react";
-import { useAuthStore } from "@/store/AuthStore";
 
 import Home from "@/pages/Home";
 import Game from "@/pages/Game";
@@ -20,12 +18,6 @@ import Account from "@/pages/users/Account";
 import PrivateRoute from "@/routes/PrivateRoutes";
 
 function App() {
-    const { checkAuth } = useAuthStore();
-
-    useEffect(() => {
-        checkAuth();
-    }, [checkAuth]);
-
     const router = createBrowserRouter(
         createRoutesFromElements(
             <>

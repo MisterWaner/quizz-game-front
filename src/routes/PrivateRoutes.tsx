@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuthStore } from "@/store/AuthStore";
+import Cookies from "js-cookie";
 
 export default function PrivateRoute() {
-    const { user } = useAuthStore();
+    const token = Cookies.get("token") as string;
 
-    return user ? <Outlet /> : <Navigate to="/connexion" />;
+    return token ? <Outlet /> : <Navigate to="/connexion" />;
 }
