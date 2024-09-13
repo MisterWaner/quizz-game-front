@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
     Sheet,
     SheetTitle,
@@ -9,10 +10,12 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { X, Menu } from "lucide-react";
-import { MobileNavButton } from "./NavButtons";
-import { menuLinks } from "@/lib/menu-links";
+import { MobileNavButton } from "@/components/Header/Nav/NavButtons";
+import { connectedMenuLinks } from "@/lib/menu-links";
 
-export default function MobileNav() {
+import { logOutUser } from "@/service/authToBack";
+
+export default function ConnectedMobileNav() {
     return (
         <nav className="md:hidden">
             <Sheet>
@@ -33,9 +36,18 @@ export default function MobileNav() {
                         </SheetClose>
                     </SheetHeader>
                     <ul className="w-full flex flex-col items-center gap-3">
-                        {menuLinks.map((link) => (
+                        {connectedMenuLinks.map((link) => (
                             <MobileNavButton key={link.id} {...link} />
                         ))}
+                        <li className="text-slate-50">
+                            <Link to="/connexion">
+                                <SheetClose asChild>
+                                    <Button onClick={() => logOutUser()} variant="ghost">
+                                        SE DÉCONNECTER
+                                    </Button>
+                                </SheetClose>
+                            </Link>
+                        </li>
                     </ul>
                 </SheetContent>
             </Sheet>

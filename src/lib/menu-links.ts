@@ -21,4 +21,22 @@ const menuLinks: { id: number, label: string, path: string }[] = [
     }
 ]
 
-export { menuLinks };
+const connectedMenuLinks: { id: number; label: string; path: string}[] = [
+    {
+        id: 1,
+        label: "Mon compte",
+        path: "/compte"
+    },
+    {
+        id: 2,
+        label: "Jouer",
+        path: "/jouer"
+    },
+    {
+        id: 3,
+        label: "Classements",
+        path: "/classements"
+    }
+]
+
+export { menuLinks, connectedMenuLinks };

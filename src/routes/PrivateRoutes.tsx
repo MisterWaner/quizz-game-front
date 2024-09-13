@@ -1,8 +1,12 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-export default function PrivateRoute() {
+export default function PrivateRoute({children}: {children: React.ReactNode}) {
     const token = Cookies.get("token") as string;
 
-    return token ? <Outlet /> : <Navigate to="/connexion" />;
+    if (!token) {
+        return <Navigate to="/connexion" />;
+    }
+
+    return children
 }

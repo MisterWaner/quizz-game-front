@@ -90,3 +90,18 @@ export async function checkAuth(token: string) {
         throw error;
     }
 }
+
+export async function logOutUser() {
+    const response = await fetch(`${BASE_URL}/auth/logout`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    if (response.ok) {
+        Cookies.remove("token");
+        return response;
+    } else {
+        throw new Error("Une erreur est survenue lors de la déconnexion");
+    }
+}

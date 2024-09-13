@@ -13,16 +13,16 @@ import Loggin from "@/pages/Loggin";
 import Register from "@/pages/Register";
 import MainLayout from "@/layouts/MainLayout";
 import GameLayout from "@/layouts/GameLayout";
+import AccountLayout from "@/layouts/AccountLayout";
 import RegisterDialog from "./components/AlertDialog/RegisterDialog";
 import Account from "@/pages/users/Account";
-import PrivateRoute from "@/routes/PrivateRoutes";
 
 function App() {
     const router = createBrowserRouter(
         createRoutesFromElements(
             <>
                 <Route path="/" element={<MainLayout />}>
-                    <Route path="/" element={<Home />} />
+                    <Route index element={<Home />} />
                     <Route path="/connexion" element={<Loggin />} />
                     <Route
                         path="/inscription"
@@ -34,9 +34,9 @@ function App() {
                         <Route index element={<Quizz />} />
                     </Route>
                     <Route path="/classements" element={<Ranks />} />
-                    <Route element={<PrivateRoute />}>
-                        <Route path="/compte" element={<Account />} />
-                    </Route>
+                </Route>
+                <Route path="/compte" element={<AccountLayout />}>
+                    <Route index element={<Account />} />
                 </Route>
             </>
         )
