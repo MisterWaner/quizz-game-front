@@ -1,13 +1,15 @@
-import useCookie from "@/hooks/useCookie";
+import useAuthToken from "@/hooks/useAuthToken";
+import useRedirect from "@/hooks/useRedirect";
 
 export default function Account() {
-    const { username, score, global_score } = useCookie();
+    const { userInfo } = useAuthToken();
+    useRedirect();
     return (
         <div>
-            <h1 className="text-3xl">Bonjour {username}</h1>
-            <p>Nom d'utilisateur : {username}</p>
-            <p>Score : {score}</p>
-            <p>Score global : {global_score}</p>
+            <h1 className="text-3xl">Salut {userInfo?.username}</h1>
+            
+            <p>Ton score journalier est : {userInfo?.score}</p>
+            <p>Ton score mensuel est : {userInfo?.global_score}</p>
         </div>
     )
 }

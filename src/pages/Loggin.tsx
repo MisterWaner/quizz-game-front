@@ -1,8 +1,10 @@
 import LoginForm from "@/components/Forms/LoginForm";
 import FormCard from "@/components/Cards/FormCard";
 import ContentSection from "@/components/ContentSection";
+import useRedirect from "@/hooks/useRedirect";
 
 export default function Loggin() {
+    useRedirect();
     return (
         <div className="overflow-hidden">
             <ContentSection>

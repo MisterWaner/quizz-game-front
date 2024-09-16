@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 import {
     Sheet,
     SheetTitle,
@@ -13,9 +14,12 @@ import { X, Menu } from "lucide-react";
 import { MobileNavButton } from "@/components/Header/Nav/NavButtons";
 import { connectedMenuLinks } from "@/lib/menu-links";
 
-import { logOutUser } from "@/service/authToBack";
 
 export default function ConnectedMobileNav() {
+    const handleLogout = () => {
+        Cookies.remove("token");
+    }
+
     return (
         <nav className="md:hidden">
             <Sheet>
@@ -40,9 +44,9 @@ export default function ConnectedMobileNav() {
                             <MobileNavButton key={link.id} {...link} />
                         ))}
                         <li className="text-slate-50">
-                            <Link to="/connexion">
+                            <Link to="/connexion" onClick={handleLogout}>
                                 <SheetClose asChild>
-                                    <Button onClick={() => logOutUser()} variant="ghost">
+                                    <Button  variant="ghost">
                                         SE DÉCONNECTER
                                     </Button>
                                 </SheetClose>

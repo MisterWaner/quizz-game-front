@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 import { connectedMenuLinks } from "@/lib/menu-links";
 import { DesktopNavButton } from "@/components/Header/Nav/NavButtons";
 import { Button } from "@/components/ui/button";
 
-import { logOutUser } from "@/service/authToBack";
 
 export default function ConnectedDeskNav() {
+    const handleLogout = () => {
+        Cookies.remove("token");
+    }
     return (
         <nav className="w-full max-md:hidden">
             <ul className="w-full flex justify-end items-center gap-3">
@@ -16,7 +19,7 @@ export default function ConnectedDeskNav() {
                 ))}
                 <li>
                     <Link to="/connexion">
-                        <Button onClick={() => logOutUser()}>SE DÉCONNECTER</Button>
+                        <Button onClick={handleLogout} variant={"ghost"}>SE DÉCONNECTER</Button>
                     </Link>
                 </li>
             </ul>

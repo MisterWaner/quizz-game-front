@@ -8,6 +8,8 @@ function useRedirect() {
         const token = Cookies.get("token");
         if (token) {
             navigate("/compte");
+        } else {
+            navigate("/connexion");
         }
     }, [navigate]);
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import useAuthToken from "@/hooks/useAuthToken";
 import {
     Table,
     TableBody,
@@ -12,7 +13,7 @@ import { User } from "@/lib/types";
 
 export function DailyRankingTable() {
     const [dailyScores, setDailyScores] = useState<User[]>([]);
-
+    const { userInfo } = useAuthToken();
     useEffect(() => {
         const loadDailyScores: Promise<User[]> = getDailyScores();
         loadDailyScores
@@ -38,7 +39,14 @@ export function DailyRankingTable() {
 
             <TableBody>
                 {dailyScores.map((user, index) => (
-                    <TableRow key={index}>
+                    <TableRow
+                        key={index}
+                        className={
+                            (userInfo && userInfo?.username) === user.username
+                                ? "bg-green-400 hover:bg-green-500"
+                                : ""
+                        }
+                    >
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>{user.username}</TableCell>
                         <TableCell>{user.score}</TableCell>
