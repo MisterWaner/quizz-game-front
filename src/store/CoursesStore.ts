@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type CourseState = {
+export type CourseState = {
     title: string;
     isSelected: boolean;
     type: string;
@@ -8,7 +8,11 @@ type CourseState = {
         statement: string | null;
         answer: number | string | null;
     } | null;
+
+    username: string;
+    userId: number;
     score: number;
+    dailyScore: number;
     playerAnswer: number | string;
     questionCounter: number;
     totalQuestions: number;
@@ -23,8 +27,15 @@ type Action = {
         isSelected: CourseState["isSelected"],
         type: CourseState["type"]
     ) => void;
+    setPlayer: (
+        userId: CourseState["userId"],
+        username: CourseState["username"],
+        score: CourseState["score"],
+        dailyScore: CourseState["dailyScore"]
+    ) => void;
     generateQuestion: (type: string) => void;
     incrementScore: () => void;
+    incrementDailyScore: () => void;
     incrementQuestionCounter: () => void;
     resetQuestionCounter: () => void;
     resetScore: () => void;
@@ -40,12 +51,9 @@ export const useCourseStore = create<CourseState & Action>()((set, get) => ({
     question: null,
     score: 0,
     dailyScore: 0,
-    weeklyScore: 0,
-    monthlyScore: 0,
-    player: undefined,
+    username: "",
+    userId: 0,
     dailyPercentage: 0,
-    weeklyPercentage: 0,
-    monthlyPercentage: 0,
     playerAnswer: "",
     questionCounter: 0,
     totalQuestions: 10,
@@ -57,6 +65,10 @@ export const useCourseStore = create<CourseState & Action>()((set, get) => ({
         set({ title, isSelected, type });
         console.log({ title, isSelected, type });
     },
+    setPlayer(userId, username, score, dailyScore) {
+        set({ userId, username, score, dailyScore });
+        console.log({ userId, username, score, dailyScore });
+    },
     incrementQuestionCounter: () => {
         const { questionCounter, totalQuestions } = get();
         for (let i = 0; i < totalQuestions; i++) {
@@ -65,6 +77,12 @@ export const useCourseStore = create<CourseState & Action>()((set, get) => ({
     },
     incrementScore: () => {
         set((state) => ({ score: state.score + 1 }));
+    },
+    incrementDailyScore: () => {
+        const { score } = get();
+        set((state) => ({
+            dailyScore: state.dailyScore + score,
+        }));
     },
     // Reset the score
     resetScore: () => {

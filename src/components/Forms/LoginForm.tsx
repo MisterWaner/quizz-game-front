@@ -29,12 +29,10 @@ export default function LoginForm() {
     const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
     const [showSuccessDialog, setShowSuccessDialog] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
-
     const navigate = useNavigate();
 
     const handleLogin = async(data: z.infer<typeof loginSchema>) => {
         await loginUser(data);
-
         if (!error) {
             setShowSuccessDialog(true);
             setError("");

@@ -5,6 +5,7 @@ import { Question, User } from "@/lib/types";
 export async function getQuestions(type: string): Promise<Question[]> {
     try {
         const response = await fetch(`${BASE_URL}/algebra/${type}`, {
+            method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -26,6 +27,7 @@ export async function getQuestions(type: string): Promise<Question[]> {
 export async function getDailyScores(): Promise<User[]> {
     try {
         const response = await fetch(`${BASE_URL}/scores/daily`, {
+            method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -49,6 +51,7 @@ export async function getDailyScores(): Promise<User[]> {
 export async function getGlobalScores(): Promise<User[]> {
     try {
         const response = await fetch(`${BASE_URL}/scores/global`, {
+            method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -72,6 +75,7 @@ export async function getGlobalScores(): Promise<User[]> {
 export async function getTop5DailyScores(): Promise<User[]> {
     try {
         const response = await fetch(`${BASE_URL}/scores/daily-five`, {
+            method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -95,6 +99,7 @@ export async function getTop5DailyScores(): Promise<User[]> {
 export async function getTop5GlobalScores(): Promise<User[]> {
     try {
         const response = await fetch(`${BASE_URL}/scores/global-five`, {
+            method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },

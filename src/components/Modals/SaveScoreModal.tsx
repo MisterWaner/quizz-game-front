@@ -25,7 +25,7 @@ export default function SaveScoreModal({
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>
+                    <AlertDialogTitle className="text-slate-950">
                         Ton score a été enregistré !
                     </AlertDialogTitle>
                 </AlertDialogHeader>

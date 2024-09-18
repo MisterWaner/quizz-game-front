@@ -11,9 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import ResultModal from "@/components/Modals/ResultModal";
 import SaveScoreModal from "@/components/Modals/SaveScoreModal";
-
 import { useCourseStore } from "@/store/CoursesStore";
 import { getQuestions } from "@/service/getDataFromBack";
+import { updateScore } from "@/service/sendDataToBack";
 import { Question } from "@/lib/types";
 
 export default function QuestionCard({ type }: { type: string }) {
@@ -26,21 +26,26 @@ export default function QuestionCard({ type }: { type: string }) {
     const [timer, setTimer] = useState<number>(15);
     const navigate = useNavigate();
 
+    //const dailyScore = useCourseStore((state) => state.dailyScore);
+    const score = useCourseStore((state) => state.score);
+    const username = useCourseStore((state) => state.username);
     const playerAnswer = useCourseStore((state) => state.playerAnswer);
     const progress = useCourseStore((state) => state.progress);
     const totalProgress = useCourseStore((state) => state.totalProgress);
     const incrementScore = useCourseStore((state) => state.incrementScore);
+    const incrementDailyScore = useCourseStore(
+        (state) => state.incrementDailyScore
+    );
     const incrementProgress = useCourseStore(
         (state) => state.incrementProgress
     );
+    //const setPlayer = useCourseStore((state) => state.setPlayer);
     const resetProgress = useCourseStore((state) => state.resetProgress);
     const resetScore = useCourseStore((state) => state.resetScore);
     const resetQuestionCounter = useCourseStore(
         (state) => state.resetQuestionCounter
     );
-    const incrementDailyScore = useCourseStore(
-        (state) => state.incrementDailyScore
-    );
+    //const player = setPlayer(userId, username, score, dailyScore);
 
     useEffect(() => {
         const loadQuestions = async () => {
@@ -65,10 +70,10 @@ export default function QuestionCard({ type }: { type: string }) {
     const currentQuestion = questions[currentQuestionIndex];
 
     function handleNextQuestion() {
-        if (currentQuestionIndex < questions.length - 1) {
+        if (progress !== totalProgress) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
             incrementProgress();
-        } else {
+        } else if (progress === totalProgress) {
             setDialogTitle("Le quizz est terminé !");
             setDialogTitleColor("text-black");
             setDialogActionColor("bg-black text-slate-50 hover:bg-black/90");
@@ -101,16 +106,18 @@ export default function QuestionCard({ type }: { type: string }) {
                 setDialogActionColor(
                     "bg-red-500 text-slate-50 hover:bg-red-500/90"
                 );
-            } else if ((!Number(playerAnswer)) && (timer === 0)) {
-                setDialogTitle(`Dommage ! le temps est écoulé ! La bonne réponse est ${currentQuestion.answer}`);
+            } else if (!Number(playerAnswer) && timer === 0) {
+                setDialogTitle(
+                    `Dommage ! le temps est écoulé ! La bonne réponse est ${currentQuestion.answer}`
+                );
                 setDialogTitleColor("text-red-500");
                 setDialogActionColor(
                     "bg-red-500 text-slate-50 hover:bg-red-500/90"
                 );
             } else {
-                setDialogTitle("")
-                setDialogTitleColor("")
-                setDialogActionColor("")
+                setDialogTitle("");
+                setDialogTitleColor("");
+                setDialogActionColor("");
             }
             setIsTimerRunning(false);
         }
@@ -145,20 +152,18 @@ export default function QuestionCard({ type }: { type: string }) {
         setTimer(15);
     }
 
-    const data = useCourseStore((state) => ({
-        score: state.score,
-    }));
-
     const handleRestart = () => {
         incrementDailyScore();
+        updateScore(score);
         resetProgress();
         resetScore();
         resetQuestionCounter;
     };
 
     const handleSaveScore = () => {
+        console.log(score);
         incrementDailyScore();
-        updateDailyScore(player?.id, data);
+        updateScore(score);
         resetProgress();
         resetQuestionCounter();
         navigate("/jouer");
@@ -175,7 +180,7 @@ export default function QuestionCard({ type }: { type: string }) {
                     </CardHeader>
                     <CardContent>
                         <p className="text-sm font-bold text-green-500 uppercase">
-                            Bravo {player?.username} ! tu as terminé le quizz !
+                            Bravo {username} ! tu as terminé le quizz !
                         </p>
                     </CardContent>
                     <CardFooter className="justify-end">
