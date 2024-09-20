@@ -18,6 +18,7 @@ import { connectedMenuLinks } from "@/lib/menu-links";
 export default function ConnectedMobileNav() {
     const handleLogout = () => {
         Cookies.remove("token");
+        localStorage.removeItem("score");
     }
 
     return (

@@ -28,22 +28,32 @@ export default function LoginForm() {
 
     const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
     const [showSuccessDialog, setShowSuccessDialog] = useState<boolean>(false);
-    const [error, setError] = useState<string>("");
+    const [error, setError] = useState<Error | null>(null);
     const navigate = useNavigate();
 
     const handleLogin = async(data: z.infer<typeof loginSchema>) => {
-        await loginUser(data);
-        if (!error) {
-            setShowSuccessDialog(true);
-            setError("");
-        } else {
+        try {
+            await loginUser(data);
+            if (!error) {
+                setShowSuccessDialog(true);
+                setError(null);
+            } else {
+                setShowErrorDialog(true);
+                setError(error);
+            }
+        } catch (error) {
+            setError(error as Error);
             setShowErrorDialog(true);
-            setError(error);
         }
     };
 
     const handleCloseErrorDialog = () => {
         setShowErrorDialog(false);
+        setError(null);
+        form.reset({
+            username: "",
+            password: "",
+        });
     };
 
     const handleCloseSuccessDialog = () => {
@@ -105,7 +115,7 @@ export default function LoginForm() {
 
             {error ? (
                 <ErrorLoginDialog
-                    error={error}
+                    error={error.message as string} 
                     open={showErrorDialog}
                     onClose={handleCloseErrorDialog}
                 />

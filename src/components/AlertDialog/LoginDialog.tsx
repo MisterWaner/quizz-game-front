@@ -15,7 +15,7 @@ export function ErrorLoginDialog({ error, open, onClose }: { error: string, open
                 <DialogHeader>
                     <DialogTitle>Erreur</DialogTitle>
                     <DialogDescription>
-                        {error}
+                        {error.toString()}
                     </DialogDescription>
                 </DialogHeader>
                 <DialogClose asChild>

@@ -144,6 +144,18 @@ export default function QuestionCard({ type }: { type: string }) {
         setIsTimerRunning(false);
     }
 
+    function handleSaveScoreInLocalStorage() {
+        let savedScore = localStorage.getItem("score");
+        if (savedScore) {
+            const numberSavedScore = Number(savedScore);
+            savedScore = (numberSavedScore + score).toString();
+            localStorage.setItem("score", savedScore);
+            return savedScore;
+        } else {
+            return localStorage.setItem("score", score.toString());
+        }
+    }
+
     if (isTimerRunning && timer === 0) {
         handleTimeOut();
     }
@@ -154,6 +166,7 @@ export default function QuestionCard({ type }: { type: string }) {
 
     const handleRestart = () => {
         incrementDailyScore();
+        handleSaveScoreInLocalStorage();
         updateScore(score);
         resetProgress();
         resetScore();
@@ -163,8 +176,10 @@ export default function QuestionCard({ type }: { type: string }) {
     const handleSaveScore = () => {
         console.log(score);
         incrementDailyScore();
+        handleSaveScoreInLocalStorage();
         updateScore(score);
         resetProgress();
+        resetScore();
         resetQuestionCounter();
         navigate("/jouer");
     };
