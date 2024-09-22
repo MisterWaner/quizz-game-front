@@ -57,36 +57,3 @@ export async function loginUser(user: User) {
         throw error;
     }
 }
-
-export async function checkAuth(token: string) {
-    try {
-        const response = await fetch(`${BASE_URL}/auth/check-auth`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        if (response.ok) {
-            const { userId, username, isRegistered, score, global_score } =
-                jwtDecode<User>(token);
-            const user = {
-                userId,
-                username,
-                isRegistered,
-                score,
-                global_score,
-            };
-            console.log(user, "Les données sont enregistrées");
-            const responseData = await response.json();
-            console.log(responseData, "Les données sont enregistrées");
-            return responseData;
-        } else {
-            throw new Error("Une erreur est survenue lors de la connexion");
-        }
-    } catch (error) {
-        console.error("Une erreur est survenue", error);
-        throw error;
-    }
-}

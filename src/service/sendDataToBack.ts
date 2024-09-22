@@ -12,7 +12,7 @@ export async function updateScore(score: number) {
     }
 
     const { userId }: User = jwtDecode(token);
-
+    
     try {
         const response = await fetch(`${BASE_URL}/users/${userId}/score`, {
             method: "PUT",

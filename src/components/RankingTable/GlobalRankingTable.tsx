@@ -42,11 +42,14 @@ export function GlobalRankingTable() {
 
             <TableBody>
                 {globalScores.map((user, index) => (
-                    <TableRow key={index} className={
-                        (userInfo && userInfo?.username) === user.username
-                            ? "bg-green-400 hover:bg-green-500"
-                            : ""
-                    }>
+                    <TableRow
+                        key={index}
+                        className={
+                            (userInfo && userInfo?.username) === user.username
+                                ? "bg-green-400 hover:bg-green-500"
+                                : ""
+                        }
+                    >
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>{user.username}</TableCell>
                         <TableCell>{user.global_score}</TableCell>

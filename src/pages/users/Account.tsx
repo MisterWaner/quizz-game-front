@@ -2,6 +2,7 @@ import useAuthToken from "@/hooks/useAuthToken";
 import useRedirect from "@/hooks/useRedirect";
 import { useEffect, useState } from "react";
 
+
 export default function Account() {
     const { userInfo } = useAuthToken();
     const [score, setScore] = useState<number>(0);

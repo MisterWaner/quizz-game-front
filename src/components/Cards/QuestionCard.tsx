@@ -10,13 +10,15 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import ResultModal from "@/components/Modals/ResultModal";
-import SaveScoreModal from "@/components/Modals/SaveScoreModal";
+import {SaveScoreModal, EndedDiscoverModal} from "@/components/Modals/SaveScoreModal";
 import { useCourseStore } from "@/store/CoursesStore";
 import { getQuestions } from "@/service/getDataFromBack";
 import { updateScore } from "@/service/sendDataToBack";
 import { Question } from "@/lib/types";
+import useAuthToken from "@/hooks/useAuthToken";
 
 export default function QuestionCard({ type }: { type: string }) {
+    const { token } = useAuthToken();
     const [dialogTitle, setDialogTitle] = useState<string>("");
     const [dialogTitleColor, setDialogTitleColor] = useState<string>("");
     const [dialogActionColor, setDialogActionColor] = useState<string>("");
@@ -167,7 +169,7 @@ export default function QuestionCard({ type }: { type: string }) {
     const handleRestart = () => {
         incrementDailyScore();
         handleSaveScoreInLocalStorage();
-        updateScore(score);
+        updateScore(score)
         resetProgress();
         resetScore();
         resetQuestionCounter;
@@ -177,12 +179,26 @@ export default function QuestionCard({ type }: { type: string }) {
         console.log(score);
         incrementDailyScore();
         handleSaveScoreInLocalStorage();
-        updateScore(score);
+        updateScore(score)
         resetProgress();
         resetScore();
         resetQuestionCounter();
         navigate("/jouer");
     };
+
+    const handleRegister = () => {
+        resetProgress();
+        resetScore();
+        resetQuestionCounter();
+        navigate("/inscription");
+    }
+
+    const handleCancel = () => {
+        resetProgress();
+        resetScore();
+        resetQuestionCounter();
+        navigate("/");
+    }
 
     return (
         <>
@@ -199,10 +215,13 @@ export default function QuestionCard({ type }: { type: string }) {
                         </p>
                     </CardContent>
                     <CardFooter className="justify-end">
+                        {token ? (
                         <SaveScoreModal
                             handleSaveScore={handleSaveScore}
                             handleRestart={handleRestart}
-                        />
+                        /> ) : (
+                            <EndedDiscoverModal handleCancel={handleCancel} handleRegister={handleRegister} />
+                        )}
                     </CardFooter>
                 </Card>
             ) : (
