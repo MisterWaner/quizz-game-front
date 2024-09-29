@@ -1,6 +1,9 @@
 import useAuthToken from "@/hooks/useAuthToken";
 import useRedirect from "@/hooks/useRedirect";
 import { useEffect, useState } from "react";
+import StatCard from "@/components/Cards/StatCard";
+import ChartCard from "@/components/Cards/ChartCard";
+import ContentSection from "@/components/ContentSection";
 
 
 export default function Account() {
@@ -21,11 +24,18 @@ export default function Account() {
     
     useRedirect();
     return (
-        <div>
-            <h1 className="text-3xl">Salut {userInfo?.username}</h1>
+        <>
+            <h1 className="text-3xl text-center font-semibold">Salut {userInfo?.username}</h1>
             
-            <p>Ton score journalier est : {score === 0 ? userInfo?.score : score + (userInfo?.score ?? 0) }</p>
-            <p>Ton score mensuel est : {userInfo?.global_score}</p>
-        </div>
+            <ContentSection>
+                <StatCard>
+                    <p>Aujourd'hui ton score est de : {score === 0 ? userInfo?.score : score + (userInfo?.score ?? 0) } pts</p>
+                    <p>Ce mois-ci ton score mensuel est de : {userInfo?.global_score} pts</p>
+                </StatCard>
+            </ContentSection>
+            <ContentSection>
+                <ChartCard />
+            </ContentSection>
+        </>
     )
 }

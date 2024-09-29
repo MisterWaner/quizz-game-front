@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        --chart-color-desktop: rgb(136, 132, 216);
+        --chart-color-mobile: rgb(130, 202, 157);
+    }
+
+    .dark {
+        --chart-color-desktop: rgb(136, 132, 216);
+        --chart-color-mobile: rgb(130, 202, 157);
+    }
+}

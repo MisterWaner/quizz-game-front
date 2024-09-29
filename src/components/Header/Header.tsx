@@ -7,7 +7,7 @@ export default function Header() {
     return (
         <header className="flex bg-slate-950 items-center justify-between p-4 fixed z-50 top-0 w-full h-28">
             <h1 className="w-full text-center md:text-start text-xl font-bold">
-                MathémaQuiz
+                NinjaQuiz
             </h1>
             <NavChooser />
         </header>
