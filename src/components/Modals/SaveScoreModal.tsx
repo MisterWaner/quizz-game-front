@@ -72,14 +72,14 @@ export function EndedDiscoverModal({
                         Tu as terminé la découverte !
                     </AlertDialogTitle>
                 </AlertDialogHeader>
-                <AlertDialogDescription>
+                <AlertDialogDescription >
                     Tu peux créer ton compte pour continuer à jouer et
                     sauvegarder ton score.
                 </AlertDialogDescription>
-                <AlertDialogFooter className="flex flex-row gap-2">
+                <AlertDialogFooter className="flex flex-row gap-2 mt-2">
                     <AlertDialogAction asChild>
                         <Button
-                            className="font-semibold w-3/6"
+                            className="font-semibold w-3/6 self-end"
                             onClick={handleRegister}
                         >
                             Créer mon compte

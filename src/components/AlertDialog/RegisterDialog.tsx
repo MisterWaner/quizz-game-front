@@ -9,45 +9,48 @@ import {
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
-function ErrorRegisterDialog({ error }: { error: string }) {
-    return (
-        <Dialog>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Erreur</DialogTitle>
-                    <DialogDescription>
-                        Une erreur est survenue lors de l&apos;enregistrement de
-                        ton compte.
-                        {error}
-                    </DialogDescription>
-                </DialogHeader>
-                <DialogClose asChild>
-                    <div className="flex h-full justify-end">
-                        <Button className="w-1/3" variant="destructive">
-                            Fermer
-                        </Button>
-                    </div>
-                </DialogClose>
-            </DialogContent>
-        </Dialog>
-    );
-}
-
-function SuccessRegisterDialog() {
+export default function RegisterDialog({
+    registerStatus,
+    registerMessage,
+    open,
+    onOpenChange,
+    colorTitle,
+}: {
+    registerStatus: string;
+    registerMessage: string;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    colorTitle: string;
+}) {
     const navigate = useNavigate();
 
+    console.log(registerStatus, registerMessage);
+    const handleNavigate = () => {
+        if (registerStatus === "Inscription réussie") {
+            navigate("/connexion");
+        } else {
+            navigate("/inscription");
+        }
+    };
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Inscription réussie</DialogTitle>
-                    <DialogDescription>
-                        Tu fais maintenant parti de la communauté MathémaQuiz.
-                    </DialogDescription>
+                    <DialogTitle className={colorTitle}>
+                        {registerStatus}
+                    </DialogTitle>
+                    <DialogDescription>{registerMessage}</DialogDescription>
                 </DialogHeader>
                 <DialogClose asChild>
                     <div className="flex h-full justify-end">
-                        <Button className="w-1/3" variant="destructive" onClick={() => navigate("/connexion")}>
+                        <Button
+                            className="w-1/3"
+                            variant="destructive"
+                            onClick={() => {
+                                handleNavigate();
+                                onOpenChange(false);
+                            }}
+                        >
                             Fermer
                         </Button>
                     </div>
@@ -55,12 +58,4 @@ function SuccessRegisterDialog() {
             </DialogContent>
         </Dialog>
     );
-}
-
-export default function RegisterDialog( {error}: {error: string}) {
-    if (error) {
-        return <ErrorRegisterDialog error={error} />;
-    } else {
-        return <SuccessRegisterDialog />;
-    }
 }

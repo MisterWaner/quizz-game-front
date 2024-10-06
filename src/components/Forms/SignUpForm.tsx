@@ -18,36 +18,37 @@ import { Button } from "@/components/ui/button";
 import { regiserUser } from "@/service/authToBack";
 import RegisterDialog from "../AlertDialog/RegisterDialog";
 
-
 export default function SignUpForm() {
-
-    const [error, setError] = useState<string>("");
+    const [registerStatus, setRegisterStatus] = useState<string>("");
+    const [registerMessage, setRegisterMessage] = useState<string>("");
+    const [showRegisterDialog, setShowRegisterDialog] =
+        useState<boolean>(false);
+    const [colorTitle, setColorTitle] = useState<string>("");
 
     const form = useForm<z.infer<typeof registerSchema>>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
             username: "",
             password: "",
-            confirmation: ""
+            confirmation: "",
         },
     });
 
-    function onSubmit(values: z.infer<typeof registerSchema>) {
+    async function onSubmit(values: z.infer<typeof registerSchema>) {
         try {
-            regiserUser(values);
-            return (
-                <RegisterDialog error={error} />
-            )
+            await regiserUser(values);
+            setColorTitle("text-green-500");
+            setRegisterStatus("Inscription réussie");
+            setRegisterMessage("Bravo tu fais maintenant parti des ninjas !");
+            setShowRegisterDialog(true);
         } catch (error) {
-            console.error(error, "Erreur d'envoie des données au back");
             if (error instanceof Error) {
-                setError(error.message);
-            } else {
-                setError("Une erreur est survenue lors de l'enregistrement");
+                console.error(error, "Erreur d'envoie des données au back");
+                setColorTitle("text-red-500");
+                setRegisterStatus("Erreur d'enregistrement");
+                setRegisterMessage(error.message);
+                setShowRegisterDialog(true);
             }
-            return (
-                <RegisterDialog error={error instanceof Error ? error.message : "Une erreur est survenue lors de l'enregistrement"} />
-            )
         }
     }
     return (
@@ -101,7 +102,21 @@ export default function SignUpForm() {
                     )}
                 />
                 <div className="grid grid-cols-2 gap-4">
-                    <Button type="submit" className="col-start-2">S&apos;enregistrer</Button>
+                    <Button
+                        type="submit"
+                        className="col-start-2"
+                        onClick={() => setShowRegisterDialog(true)}
+                    >
+                        S&apos;enregistrer
+                    </Button>
+
+                    <RegisterDialog
+                        registerStatus={registerStatus}
+                        registerMessage={registerMessage}
+                        colorTitle={colorTitle}
+                        open={showRegisterDialog}
+                        onOpenChange={(open) => setShowRegisterDialog(open)}
+                    />
                 </div>
             </form>
         </Form>
