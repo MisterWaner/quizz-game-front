@@ -52,7 +52,7 @@ export function GlobalRankingTable() {
                     >
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>{user.username}</TableCell>
-                        <TableCell>{user.global_score}</TableCell>
+                        <TableCell>{user.current_month_score}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>
@@ -91,7 +91,7 @@ export function GlobalTop5RankingTable() {
                     <TableRow key={index}>
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>{user.username}</TableCell>
-                        <TableCell>{user.global_score}</TableCell>
+                        <TableCell>{user.current_month_score}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>

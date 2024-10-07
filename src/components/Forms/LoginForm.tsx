@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 
 import { loginSchema } from "@/lib/zod-schemas";
@@ -15,10 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-    SuccessLoginDialog,
-    ErrorLoginDialog,
-} from "../AlertDialog/LoginDialog";
+import LoginDialog from "../AlertDialog/LoginDialog";
 import { loginUser } from "@/service/authToBack";
 
 export default function LoginForm() {
@@ -26,39 +23,33 @@ export default function LoginForm() {
         resolver: zodResolver(loginSchema),
     });
 
-    const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
-    const [showSuccessDialog, setShowSuccessDialog] = useState<boolean>(false);
-    const [error, setError] = useState<Error | null>(null);
-    const navigate = useNavigate();
+    const [loginStatus, setLoginStatus] = useState<string>("");
+    const [loginMessage, setLoginMessage] = useState<string>("");
+    const [showLoginDialog, setShowLoginDialog] = useState<boolean>(false);
+    useState<boolean>(false);
+    const [colorTitle, setColorTitle] = useState<string>("");
 
-    const handleLogin = async(data: z.infer<typeof loginSchema>) => {
+    const resetForm = (): void => form.reset({
+        username: "",
+        password: "",
+    });
+
+    const handleLogin = async (data: z.infer<typeof loginSchema>) => {
         try {
             await loginUser(data);
-            if (!error) {
-                setShowSuccessDialog(true);
-                setError(null);
-            } else {
-                setShowErrorDialog(true);
-                setError(error);
-            }
+            setColorTitle("text-green-500");
+            setLoginStatus("Connexion réussie");
+            setLoginMessage("Bravo tu es maintenant connecté !");
+            setShowLoginDialog(true);
         } catch (error) {
-            setError(error as Error);
-            setShowErrorDialog(true);
+            if (error instanceof Error) {
+                console.error(error, "Erreur d'envoie des données au back");
+                setColorTitle("text-red-500");
+                setLoginStatus("Erreur de connexion");
+                setLoginMessage(error.message);
+                setShowLoginDialog(true);
+            }
         }
-    };
-
-    const handleCloseErrorDialog = () => {
-        setShowErrorDialog(false);
-        setError(null);
-        form.reset({
-            username: "",
-            password: "",
-        });
-    };
-
-    const handleCloseSuccessDialog = () => {
-        setShowSuccessDialog(false);
-        navigate("/compte");
     };
 
     return (
@@ -98,8 +89,23 @@ export default function LoginForm() {
                             </FormItem>
                         )}
                     />
+                    <div className="grid grid-cols-2 gap-4">
+                        <Button
+                            type="submit"
+                            onClick={() => setShowLoginDialog(true)}
+                        >
+                            Se connecter
+                        </Button>
 
-                    <Button type="submit">Se connecter</Button>
+                        <LoginDialog
+                            loginMessage={loginMessage}
+                            loginStatus={loginStatus}
+                            colorTitle={colorTitle}
+                            open={showLoginDialog}
+                            onOpenChange={(open) => setShowLoginDialog(open)}
+                            onClose={resetForm}
+                        />
+                    </div>
 
                     <div className="text-sm text-slate-950 dark:text-slate-400">
                         Pas encore de compte ?{" "}
@@ -112,19 +118,6 @@ export default function LoginForm() {
                     </div>
                 </form>
             </Form>
-
-            {error ? (
-                <ErrorLoginDialog
-                    error={error.message as string} 
-                    open={showErrorDialog}
-                    onClose={handleCloseErrorDialog}
-                />
-            ) : (
-                <SuccessLoginDialog
-                    open={showSuccessDialog}
-                    onClose={handleCloseSuccessDialog}
-                />
-            )}
         </>
     );
 }

@@ -39,7 +39,7 @@ export async function loginUser(user: User) {
 
         if (response.ok) {
             const { token } = await response.json();
-            const { username, userId, isRegistered, score, global_score } =
+            const { username, userId, isRegistered, score, current_month_score } =
                 jwtDecode<User>(token);
 
             Cookies.set("token", token, {
@@ -47,8 +47,8 @@ export async function loginUser(user: User) {
                 secure: true,
                 sameSite: "None",
             });
-            console.log(username, userId, isRegistered, score, global_score);
-            return { username, userId, isRegistered, score, global_score };
+            console.log(username, userId, isRegistered, score, current_month_score);
+            return { username, userId, isRegistered, score, current_month_score };
         } else {
             throw new Error("Une erreur est survenue lors de la connexion");
         }

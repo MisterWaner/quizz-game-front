@@ -16,7 +16,7 @@ const useAuthToken = () => {
                     throw new Error("Aucun token trouvé");
                 }
 
-                const { username, userId, isRegistered, score, global_score }: User =
+                const { username, userId, isRegistered, score, current_month_score }: User =
                     jwtDecode(token);
 
                 setToken(token);
@@ -25,7 +25,7 @@ const useAuthToken = () => {
                     userId,
                     isRegistered,
                     score,
-                    global_score,
+                    current_month_score,
                 });
             } catch (error) {
                 console.error("Erreur lors de la récupération du token", error);

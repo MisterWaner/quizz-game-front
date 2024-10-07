@@ -17,5 +17,6 @@ export type User = {
     password?: string;
     isRegistered?: boolean;
     score?: number;
-    global_score?: number;
+    current_month_score?: number,
+    last_month_score?: number,
 };

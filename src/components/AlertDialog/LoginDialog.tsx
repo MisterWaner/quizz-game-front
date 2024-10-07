@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
     Dialog,
     DialogContent,
@@ -8,44 +9,50 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-export function ErrorLoginDialog({ error, open, onClose }: { error: string, open: boolean, onClose: () => void }) {
-    return (
-        <Dialog open={open} onOpenChange={onClose}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Erreur</DialogTitle>
-                    <DialogDescription>
-                        {error.toString()}
-                    </DialogDescription>
-                </DialogHeader>
-                <DialogClose asChild>
-                    <div className="flex h-full justify-end">
-                        <Button className="w-1/3" variant="destructive" onClick={onClose}>
-                            Fermer
-                        </Button>
-                    </div>
-                </DialogClose>
-            </DialogContent>
-        </Dialog>
-    );
-}
+export default function LoginDialog({
+    loginStatus,
+    loginMessage,
+    open,
+    onOpenChange,
+    onClose,
+    colorTitle,
+}: {
+    loginStatus: string;
+    loginMessage: string;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    onClose: () => void;
+    colorTitle: string;
+}) {
+    const navigate = useNavigate();
 
-export function SuccessLoginDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+    console.log(loginStatus, loginMessage);
+    const handleNavigate = () => {
+        if (loginStatus === "Connexion réussie") {
+            navigate("/compte");
+        } else {
+            navigate("/connexion");
+        }
+    };
     return (
-        <Dialog open={open} onOpenChange={onClose}>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Connexion réussie</DialogTitle>
-                    <DialogDescription>
-                        Vous êtes maintenant connecté.
-                    </DialogDescription>
+                    <DialogTitle className={colorTitle}>
+                        {loginStatus}
+                    </DialogTitle>
+                    <DialogDescription>{loginMessage}</DialogDescription>
                 </DialogHeader>
                 <DialogClose asChild>
                     <div className="flex h-full justify-end">
                         <Button
                             className="w-1/3"
-                            variant="default"
-                            onClick={onClose}
+                            variant="destructive"
+                            onClick={() => {
+                                handleNavigate();
+                                onOpenChange(false);
+                                onClose();
+                            }}
                         >
                             Fermer
                         </Button>
@@ -55,3 +62,4 @@ export function SuccessLoginDialog({ open, onClose }: { open: boolean; onClose: 
         </Dialog>
     );
 }
+
