@@ -30,7 +30,7 @@ export default function Account() {
             <ContentSection>
                 <StatCard>
                     <p>Aujourd'hui ton score est de : {score === 0 ? userInfo?.score : score + (userInfo?.score ?? 0) } pts</p>
-                    <p>Ce mois-ci ton score mensuel est de : {userInfo?.global_score} pts</p>
+                    <p>Ce mois-ci ton score mensuel est de : {userInfo?.current_month_score} pts</p>
                 </StatCard>
             </ContentSection>
             <ContentSection>

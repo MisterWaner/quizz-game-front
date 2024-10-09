@@ -3,21 +3,16 @@ import Cookies from "js-cookie";
 import { connectedMenuLinks } from "@/lib/menu-links";
 import { DesktopNavButton } from "@/components/Header/Nav/NavButtons";
 import { Button } from "@/components/ui/button";
-
-const BASE_URL = "http://localhost:3001";
+import { updateCurrentMonthScore } from "@/service/sendDataToBack";
+import useAuthToken from "@/hooks/useAuthToken";
 
 export default function ConnectedDeskNav() {
+    const {userInfo} = useAuthToken();
     const handleLogout = async () => {
         try {
-            const response = await fetch(
-                `${BASE_URL}/auth/update-current-month-score`,
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const score = Number(localStorage.getItem("score"));
+            const current_month_score: number = userInfo?.current_month_score ?? 0;
+            const response = await updateCurrentMonthScore(score, current_month_score);
 
             if (response.ok) {
                 Cookies.remove("token");

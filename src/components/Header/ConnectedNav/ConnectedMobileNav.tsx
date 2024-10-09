@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import {
     Sheet,
     SheetTitle,
@@ -13,13 +12,41 @@ import { Button } from "@/components/ui/button";
 import { X, Menu } from "lucide-react";
 import { MobileNavButton } from "@/components/Header/Nav/NavButtons";
 import { connectedMenuLinks } from "@/lib/menu-links";
-
+import useAuthToken from "@/hooks/useAuthToken";
+import { updateCurrentMonthScore } from "@/service/sendDataToBack";
+import { logoutUser } from "@/service/authToBack";
 
 export default function ConnectedMobileNav() {
-    const handleLogout = () => {
-        Cookies.remove("token");
-        localStorage.removeItem("score");
-    }
+    const { userInfo } = useAuthToken();
+    const navigate = useNavigate();
+    const handleUpdateCurrentMonthScore = async () => {
+        const score = Number(localStorage.getItem("score"));
+        const current_month_score: number = userInfo?.current_month_score ?? 0;
+        console.log(
+            "Score:",
+            score,
+            "Current Month Score:",
+            current_month_score
+        );
+        const response = await updateCurrentMonthScore(
+            score,
+            current_month_score
+        );
+        console.log("Update Score API response status:", response);
+    };
+    const handleLogout = async () => {
+        try {
+            if (userInfo) {
+                await logoutUser(userInfo);
+                navigate("/connexion");
+            }
+        } catch (error) {
+            console.error(
+                "Une erreur est survenue lors de la déconnexion",
+                error
+            );
+        }
+    };
 
     return (
         <nav className="md:hidden">
@@ -45,13 +72,17 @@ export default function ConnectedMobileNav() {
                             <MobileNavButton key={link.id} {...link} />
                         ))}
                         <li className="text-slate-50">
-                            <Link to="/connexion" onClick={handleLogout}>
-                                <SheetClose asChild>
-                                    <Button  variant="ghost">
-                                        SE DÉCONNECTER
-                                    </Button>
-                                </SheetClose>
-                            </Link>
+                            <SheetClose asChild>
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => {
+                                        handleUpdateCurrentMonthScore();
+                                        handleLogout();
+                                    }}
+                                >
+                                    SE DÉCONNECTER
+                                </Button>
+                            </SheetClose>
                         </li>
                     </ul>
                 </SheetContent>
