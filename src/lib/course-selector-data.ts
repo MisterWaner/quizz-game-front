@@ -36,25 +36,19 @@ export const courseSelectorData: CourseSeclectorData[] = [
         ],
     },
     {
-        label: "Géometrie",
+        label: "Géométrie",
         courses: [
             {
                 id: 5,
-                title: "Cercle",
-                path: "cercle",
-                type: "cercle",
+                title: "Aire et Périmètre",
+                path: "aire-perimetre",
+                type: "aire-perimetre",
             },
             {
                 id: 6,
-                title: "Cylindre",
-                path: "cylindre",
-                type: "cylindre",
-            },
-            {
-                id: 7,
-                title: "Sphere",
-                path: "sphere",
-                type: "sphere",
+                title: "Propriétés",
+                path: "proprietes",
+                type: "proprietes",
             },
         ],
     },

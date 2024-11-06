@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     Card,
@@ -10,19 +10,22 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import ResultModal from "@/components/Modals/ResultModal";
-import {SaveScoreModal, EndedDiscoverModal} from "@/components/Modals/SaveScoreModal";
+import {
+    SaveScoreModal,
+    EndedDiscoverModal,
+} from "@/components/Modals/SaveScoreModal";
 import { useCourseStore } from "@/store/CoursesStore";
-import { getMathQuestions } from "@/service/getDataFromBack";
+import { getGeometryQuestions } from "@/service/getDataFromBack";
 import { updateScore } from "@/service/sendDataToBack";
-import { Question } from "@/lib/types";
+import { QCMQuestion } from "@/lib/types";
 import useAuthToken from "@/hooks/useAuthToken";
 
-export default function QuestionCard({ type }: { type: string }) {
+export default function QCMCard({ type }: { type: string }) {
     const { token } = useAuthToken();
     const [dialogTitle, setDialogTitle] = useState<string>("");
     const [dialogTitleColor, setDialogTitleColor] = useState<string>("");
     const [dialogActionColor, setDialogActionColor] = useState<string>("");
-    const [questions, setQuestions] = useState<Question[]>([]);
+    const [questions, setQuestions] = useState<QCMQuestion[]>([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
     const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
     const [timer, setTimer] = useState<number>(15);
@@ -51,7 +54,7 @@ export default function QuestionCard({ type }: { type: string }) {
 
     useEffect(() => {
         const loadQuestions = async () => {
-            const questions = await getMathQuestions(type);
+            const questions = await getGeometryQuestions(type);
             setQuestions(questions);
             setCurrentQuestionIndex(0);
         };
@@ -69,8 +72,6 @@ export default function QuestionCard({ type }: { type: string }) {
         }
     }, [isTimerRunning, timer]);
 
-    const currentQuestion = questions[currentQuestionIndex];
-
     function handleNextQuestion() {
         if (progress !== totalProgress) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -82,6 +83,8 @@ export default function QuestionCard({ type }: { type: string }) {
         }
     }
 
+    const currentQuestion = questions[currentQuestionIndex];
+
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
         const value = event.target.value;
         useCourseStore.setState({
@@ -91,7 +94,7 @@ export default function QuestionCard({ type }: { type: string }) {
 
     function checkPlayerAnswer(playerAnswer: string | number) {
         if (currentQuestion) {
-            if (Number(playerAnswer) === Number(currentQuestion.answer)) {
+            if (Number(playerAnswer) === Number(currentQuestion.correct_answer)) {
                 setDialogTitle("Bravo ! Bonne réponse !");
                 setDialogTitleColor("text-green-500");
                 setDialogActionColor(
@@ -99,10 +102,10 @@ export default function QuestionCard({ type }: { type: string }) {
                 );
                 incrementScore();
             } else if (
-                Number(playerAnswer) !== Number(currentQuestion.answer)
+                Number(playerAnswer) !== Number(currentQuestion.correct_answer)
             ) {
                 setDialogTitle(
-                    `Dommage ! Mauvaise réponse! La bonne réponse est ${currentQuestion.answer}`
+                    `Dommage ! Mauvaise réponse! La bonne réponse est ${currentQuestion.correct_answer}`
                 );
                 setDialogTitleColor("text-red-500");
                 setDialogActionColor(
@@ -110,7 +113,7 @@ export default function QuestionCard({ type }: { type: string }) {
                 );
             } else if (!Number(playerAnswer) && timer === 0) {
                 setDialogTitle(
-                    `Dommage ! le temps est écoulé ! La bonne réponse est ${currentQuestion.answer}`
+                    `Dommage ! le temps est écoulé ! La bonne réponse est ${currentQuestion.correct_answer}`
                 );
                 setDialogTitleColor("text-red-500");
                 setDialogActionColor(
@@ -169,7 +172,7 @@ export default function QuestionCard({ type }: { type: string }) {
     const handleRestart = () => {
         incrementDailyScore();
         handleSaveScoreInLocalStorage();
-        updateScore(score)
+        updateScore(score);
         resetProgress();
         resetScore();
         resetQuestionCounter;
@@ -179,7 +182,7 @@ export default function QuestionCard({ type }: { type: string }) {
         console.log(score);
         incrementDailyScore();
         handleSaveScoreInLocalStorage();
-        updateScore(score)
+        updateScore(score);
         resetProgress();
         resetScore();
         resetQuestionCounter();
@@ -191,14 +194,14 @@ export default function QuestionCard({ type }: { type: string }) {
         resetScore();
         resetQuestionCounter();
         navigate("/inscription");
-    }
+    };
 
     const handleCancel = () => {
         resetProgress();
         resetScore();
         resetQuestionCounter();
         navigate("/");
-    }
+    };
 
     return (
         <>
@@ -216,11 +219,15 @@ export default function QuestionCard({ type }: { type: string }) {
                     </CardContent>
                     <CardFooter className="justify-end">
                         {token ? (
-                        <SaveScoreModal
-                            handleSaveScore={handleSaveScore}
-                            handleRestart={handleRestart}
-                        /> ) : (
-                            <EndedDiscoverModal handleCancel={handleCancel} handleRegister={handleRegister} />
+                            <SaveScoreModal
+                                handleSaveScore={handleSaveScore}
+                                handleRestart={handleRestart}
+                            />
+                        ) : (
+                            <EndedDiscoverModal
+                                handleCancel={handleCancel}
+                                handleRegister={handleRegister}
+                            />
                         )}
                     </CardFooter>
                 </Card>

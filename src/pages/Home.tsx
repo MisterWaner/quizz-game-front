@@ -11,15 +11,14 @@ export default function Home() {
             <ContentSection>
                 <p>
                     Bienvenue à toi jeune Padawan, si tu es ici c&apos;est que
-                    tu as envie de faire des mathématiques.
+                    tu as envie de faire de t'améliorer dans ta ou tes matières préférées !
                 </p>
                 <br />
                 <p>
                     <span className="font-bold">Apprends</span>,{" "}
                     <span className="font-bold">Progresse</span>,{" "}
                     <span className="font-bold">Gagne</span> et deviens un{" "}
-                    <span className="font-bold text-primary">PRO</span> des
-                    maths.
+                    <span className="font-bold text-primary">PRO</span> !
                 </p>
                 <div className="my-10 w-full md:w-2/4 md:mx-auto">
                     <div className="grid grid-flow-col auto-cols-fr gap-4 ">
