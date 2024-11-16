@@ -7,7 +7,7 @@ type CourseSeclectorData = {
 
 export const courseSelectorData: CourseSeclectorData[] = [
     {
-        label: "Algèbre",
+        label: "Mathématiques",
         courses: [
             {
                 id: 1,
@@ -29,15 +29,10 @@ export const courseSelectorData: CourseSeclectorData[] = [
             },
             {
                 id: 4,
-                title: "Quizz aléatoire",
+                title: "Calculs aléatoires",
                 path: "random",
                 type: "random",
-            }
-        ],
-    },
-    {
-        label: "Géométrie",
-        courses: [
+            },
             {
                 id: 5,
                 title: "Aire et Périmètre",
@@ -49,6 +44,17 @@ export const courseSelectorData: CourseSeclectorData[] = [
                 title: "Propriétés",
                 path: "proprietes",
                 type: "proprietes",
+            }
+        ],
+    },
+    {
+        label: "Histoire",
+        courses: [
+            {
+                id: 7,
+                title: "Histoire",
+                path: "histoire",
+                type: "histoire",
             },
         ],
     },

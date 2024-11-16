@@ -9,7 +9,7 @@ export default function Game() {
     const { userInfo } = useAuthToken();
     return (
         <>
-            <h2 className="text-2xl font-bold text-center mt-10">Les jeux</h2>
+            <h2 className="text-2xl font-bold text-center mt-10">Commence l'Aventure</h2>
             {!userInfo && (
                 <>
                     <ContentSection>

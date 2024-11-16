@@ -14,7 +14,7 @@ import {SaveScoreModal, EndedDiscoverModal} from "@/components/Modals/SaveScoreM
 import { useCourseStore } from "@/store/CoursesStore";
 import { getMathQuestions } from "@/service/getDataFromBack";
 import { updateScore } from "@/service/sendDataToBack";
-import { Question } from "@/lib/types";
+import { QCMQuestion, Question } from "@/lib/types";
 import useAuthToken from "@/hooks/useAuthToken";
 
 export default function QuestionCard({ type }: { type: string }) {
@@ -22,7 +22,7 @@ export default function QuestionCard({ type }: { type: string }) {
     const [dialogTitle, setDialogTitle] = useState<string>("");
     const [dialogTitleColor, setDialogTitleColor] = useState<string>("");
     const [dialogActionColor, setDialogActionColor] = useState<string>("");
-    const [questions, setQuestions] = useState<Question[]>([]);
+    const [questions, setQuestions] = useState<Question[] | QCMQuestion[]>([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
     const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
     const [timer, setTimer] = useState<number>(15);
@@ -91,7 +91,7 @@ export default function QuestionCard({ type }: { type: string }) {
 
     function checkPlayerAnswer(playerAnswer: string | number) {
         if (currentQuestion) {
-            if (Number(playerAnswer) === Number(currentQuestion.answer)) {
+            if (Number(playerAnswer) === Number(currentQuestion.correct_answer)) {
                 setDialogTitle("Bravo ! Bonne réponse !");
                 setDialogTitleColor("text-green-500");
                 setDialogActionColor(
@@ -99,10 +99,10 @@ export default function QuestionCard({ type }: { type: string }) {
                 );
                 incrementScore();
             } else if (
-                Number(playerAnswer) !== Number(currentQuestion.answer)
+                Number(playerAnswer) !== Number(currentQuestion.correct_answer)
             ) {
                 setDialogTitle(
-                    `Dommage ! Mauvaise réponse! La bonne réponse est ${currentQuestion.answer}`
+                    `Dommage ! Mauvaise réponse! La bonne réponse est ${currentQuestion.correct_answer}`
                 );
                 setDialogTitleColor("text-red-500");
                 setDialogActionColor(
@@ -110,7 +110,7 @@ export default function QuestionCard({ type }: { type: string }) {
                 );
             } else if (!Number(playerAnswer) && timer === 0) {
                 setDialogTitle(
-                    `Dommage ! le temps est écoulé ! La bonne réponse est ${currentQuestion.answer}`
+                    `Dommage ! le temps est écoulé ! La bonne réponse est ${currentQuestion.correct_answer}`
                 );
                 setDialogTitleColor("text-red-500");
                 setDialogActionColor(

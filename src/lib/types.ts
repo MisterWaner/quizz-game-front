@@ -8,7 +8,7 @@ export type Course = {
 export type Question = {
     id: number;
     question: string;
-    answer: string;
+    correct_answer: string;
 };
 
 export type QCMQuestion = {
